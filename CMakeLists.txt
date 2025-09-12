@@ -11,11 +11,17 @@ endif()
 
 project ("AutoCoverLetterFiller")
 
+add_subdirectory(extern/DuckX)
+
 # Add source to this project's executable.
-add_executable (AutoCoverLetterFiller "AutoCoverLetterFiller.cpp" "AutoCoverLetterFiller.h")
+add_executable (AutoCoverLetterFiller "src/AutoCoverLetterFiller.cpp" "src/AutoCoverLetterFiller.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET AutoCoverLetterFiller PROPERTY CXX_STANDARD 20)
 endif()
 
 # TODO: Add tests and install targets if needed.
+target_link_libraries(AutoCoverLetterFiller duckx)
+target_include_directories(AutoCoverLetterFiller PRIVATE extern/DuckX/include)
+target_include_directories(AutoCoverLetterFiller PRIVATE extern/DuckX/thirdparty/pugixml)
+target_include_directories(AutoCoverLetterFiller PRIVATE extern/DuckX/thirdparty/zip)

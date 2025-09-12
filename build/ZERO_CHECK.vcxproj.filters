@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mespo\Projects\AutoCoverLetterFiller\build\CMakeFiles\b9ffda6440976a35e3289e518523b016\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{99D02642-18A0-3B71-A645-91BEAB743E14}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

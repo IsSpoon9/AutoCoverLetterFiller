@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\mespo\Projects\AutoCoverLetterFiller\AutoCoverLetterFiller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\mespo\Projects\AutoCoverLetterFiller\AutoCoverLetterFiller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\mespo\Projects\AutoCoverLetterFiller\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{DFBDA63F-3017-357A-A623-EACB8B87E195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{CCE5EDD2-F1F1-33E2-9B44-584E46635799}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
