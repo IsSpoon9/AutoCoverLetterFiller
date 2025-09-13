@@ -1,0 +1,9 @@
+[submodule "extern/ImGuiFileDialog"]
+	path = extern/ImGuiFileDialog
+	url = https://github.com/aiekick/ImGuiFileDialog.git
+[submodule "extern/ImGui"]
+	path = extern/ImGui
+	url = https://github.com/ocornut/imgui.git
+[submodule "extern/DuckX"]
+	path = extern/DuckX
+	url = https://github.com/amiremohamadi/DuckX.git
