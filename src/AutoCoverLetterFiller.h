@@ -32,6 +32,8 @@
 
 #define ERROR_INTIALIZE 1
 
+
+
 class CAutoCoverLetter
 {
 public:
@@ -50,7 +52,7 @@ public:
 	void recruiterInformation();
 	void documentCreation();
 
-	void fileSelector(const char* fileType);
+	bool fileSelector(const char* fileType, std::string& filepath);
 	std::string inputText(const char* label);
 	std::string dropDownBox(const char* label, int& selectedItem);
 
@@ -60,8 +62,10 @@ private:
 
 	companyData company;
 
-	doxcAdjuster doxcAdj;
+	doxcAdjuster docxAdj;
+
 	bool fileVerified;
+	bool grabfiles;
 
 	std::vector<std::string> foundParagraphs;
 

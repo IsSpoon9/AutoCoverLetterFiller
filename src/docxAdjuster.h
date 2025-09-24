@@ -9,14 +9,24 @@
 #include <string>
 #include <iostream>
 
+#define DATE_CODE "[Date]"
+#define COMPANY_CODE "[Company Name]" 
+#define ADDRESS_CODE "[Company Address]"
+#define CITY_CODE "[Company City]"
+#define PROVINCE_CODE "[Company Province/State]"
+#define POSTAL_CODE "[Company Postal Code]"
+#define RECRUITER_CODE "[Recruitment Officer]"
+#define JOB_CODE "[Job Position]"
+#define PARAGRAPH_CODE "[Template Paragraph Begin]"
+
 class doxcAdjuster
-{
+{	
 public:
 	doxcAdjuster();
 	~doxcAdjuster();
 
 	bool verifyPath();
-	std::vector<std::string> findParagraphs();
+	std::vector<int> findParagraphs();
 	//bool editDocument();
 
 	std::string getFilePath() const { return filePath; }

@@ -12,6 +12,7 @@ int main() {
 
 CAutoCoverLetter::CAutoCoverLetter() {
     recruiterInfo = false;
+	grabfiles = false;
     fileVerified = false;
 	selectedParagraph1 = 0;
     selectedParagraph2 = 1;
@@ -107,15 +108,19 @@ void CAutoCoverLetter::interface() {
 void CAutoCoverLetter::templateSelection() {
 
     if (ImGui::CollapsingHeader("Template Selection", ImGuiTreeNodeFlags_DefaultOpen)) {
-        fileSelector(".docx");
+        fileSelector(".docx", docxAdj.getFilePath());
         if (fileVerified) {
 
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));//green
             ImGui::Text("File Verified");
             ImGui::PopStyleColor();
-			foundParagraphs = doxcAdj.findParagraphs();
-            for(int i = 0; i < foundParagraphs.size(); i++)
-				std::cout << foundParagraphs[i] << std::endl;
+
+            if (grabfiles == true) {
+				grabfiles = false;
+                std::vector<int> numParagraphs = docxAdj.findParagraphs();
+                for (int i = 0; i < numParagraphs.size(); i++)
+                    foundParagraphs.push_back("Template Paragraph " + std::to_string(i+1));
+            }
 			
         }
 
@@ -143,10 +148,12 @@ void CAutoCoverLetter::parameterAdjustment() {
         company.setPosition(inputText("Position"));
 
         
-        foundParagraphs = { "Option 1", "Option 2", "Option 3", "Another Option" };
-        dropDownBox("Paragraph 1", selectedParagraph1);
-		dropDownBox("Paragraph 2", selectedParagraph2);
-		dropDownBox("Paragraph 3", selectedParagraph3);
+		if (foundParagraphs.size() > 0)
+            dropDownBox("Paragraph 1", selectedParagraph1);
+        if (foundParagraphs.size() > 1)
+		    dropDownBox("Paragraph 2", selectedParagraph2);
+		if (foundParagraphs.size() > 2)
+		    dropDownBox("Paragraph 3", selectedParagraph3);
 
         
     }
@@ -155,7 +162,7 @@ void CAutoCoverLetter::parameterAdjustment() {
 void CAutoCoverLetter::documentCreation() {
 
     if (ImGui::CollapsingHeader("Document Creation, ImGuiTreeNodeFlags_DefaultOpen")) {
-        fileSelector(".docx");
+        //fileSelector(".docx");
         ImGui::Button("Start");
     }
 }
@@ -178,10 +185,11 @@ void CAutoCoverLetter::render() {
     glfwSwapBuffers(window);
 }
 
-void CAutoCoverLetter::fileSelector(const char* fileType) {
+bool CAutoCoverLetter::fileSelector(const char* fileType, std::string& filepath) {
+    bool wasChanged = false;
 
     char text[128];
-    strncpy_s(text, doxcAdj.getFilePath().c_str(), sizeof(text));
+    strncpy_s(text, filepath.c_str(), sizeof(text));
     text[sizeof(text) - 1] = '\0';
 
     if (ImGui::InputText("###fileselector", text, IM_ARRAYSIZE(text)))
@@ -195,10 +203,13 @@ void CAutoCoverLetter::fileSelector(const char* fileType) {
     }
 
     if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
-        if (ImGuiFileDialog::Instance()->IsOk()) { // action if OK
+        if (ImGuiFileDialog::Instance()->IsOk()) {
             doxcAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
-            doxcAdj.setFileName(ImGuiFileDialog::Instance()->GetCurrentPath());
-            fileVerified = doxcAdj.verifyPath();
+            filepath = ImGuiFileDialog::Instance()->GetCurrentPath();
+			wasChanged = true;
+
+			//grabfiles = true;
+            //fileVerified = doxcAdj.verifyPath();
         }
 
         ImGuiFileDialog::Instance()->Close();

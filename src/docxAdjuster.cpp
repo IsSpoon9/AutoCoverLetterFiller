@@ -26,14 +26,16 @@ bool doxcAdjuster::verifyPath() {
 }
 
 std::vector<int> doxcAdjuster::findParagraphs() {
-	std::vector <std::string> paragraphsFound;
+	std::vector <int> paragraphsFound;
+	int linenum = 0;
+
 	doc.open();
 	for (auto p : doc.paragraphs()) {
+		linenum++;
 		std::string paragraphText = "";
 		for (auto r : p.runs())
-			if (r.get_text() != "")
-				paragraphText += (r.get_text());
-		paragraphsFound.push_back(paragraphText);
+			if (r.get_text() == PARAGRAPH_CODE)
+				paragraphsFound.push_back(linenum);
 	}
 
 	return paragraphsFound;
