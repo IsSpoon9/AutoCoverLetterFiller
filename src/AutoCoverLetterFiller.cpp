@@ -108,7 +108,23 @@ void CAutoCoverLetter::interface() {
 void CAutoCoverLetter::templateSelection() {
 
     if (ImGui::CollapsingHeader("Template Selection", ImGuiTreeNodeFlags_DefaultOpen)) {
-        fileSelector(".docx", docxAdj.getFilePath());
+        
+        char text[128];
+        strncpy_s(text, docxAdj.getFilePath().c_str(), sizeof(text));
+        text[sizeof(text) - 1] = '\0';
+
+        if (ImGui::InputText("###fileselector", text, IM_ARRAYSIZE(text)))
+            docxAdj.setFilePath(text);
+        ImGui::SameLine();
+
+        if (ImGui::Button("Open File Dialog")) {
+            IGFD::FileDialogConfig config;
+            config.path = ".";
+            ImGuiFileDialog::Instance()->OpenDialog(Template_FileKey, "Choose File", Template_FileType, config);
+        }
+		docxAdj.setFilePath(fileSelectorInstance(Template_FileKey, Template_FileType));
+        
+        
         if (fileVerified) {
 
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));//green
@@ -185,37 +201,34 @@ void CAutoCoverLetter::render() {
     glfwSwapBuffers(window);
 }
 
-bool CAutoCoverLetter::fileSelector(const char* fileType, std::string& filepath) {
-    bool wasChanged = false;
-
-    char text[128];
-    strncpy_s(text, filepath.c_str(), sizeof(text));
-    text[sizeof(text) - 1] = '\0';
-
-    if (ImGui::InputText("###fileselector", text, IM_ARRAYSIZE(text)))
-        doxcAdj.setFilePath(text);
-    ImGui::SameLine();
-
-    if (ImGui::Button("Open File Dialog")) {
-        IGFD::FileDialogConfig config;
-        config.path = ".";
-        ImGuiFileDialog::Instance()->OpenDialog("ChooseFileDlgKey", "Choose File", fileType, config);
-    }
-
+std::string CAutoCoverLetter::fileSelectorInstance(const char* dialog, const char* fileType0) {
+	std::string filepath = "";
     if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
         if (ImGuiFileDialog::Instance()->IsOk()) {
-            doxcAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
-            filepath = ImGuiFileDialog::Instance()->GetCurrentPath();
-			wasChanged = true;
+            //docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
+          
+            //filepath = ImGuiFileDialog::Instance()->GetCurrentPath();
+            filepath = ImGuiFileDialog::Instance()->GetFilePathName();
+            //wasChanged = true;
 
-			//grabfiles = true;
-            //fileVerified = doxcAdj.verifyPath();
+
         }
 
         ImGuiFileDialog::Instance()->Close();
     }
-    //std::cout << filepath;
+	return filepath;
 }
+
+//bool CAutoCoverLetter::fileSelector(const char* fileType, std::string& filepath) {
+    //bool wasChanged = false;
+
+    
+
+    
+
+    
+    //std::cout << filepath;
+//}
 
 std::string CAutoCoverLetter::inputText(const char* label) {
     std::string returnVal = "";
@@ -225,6 +238,7 @@ std::string CAutoCoverLetter::inputText(const char* label) {
         returnVal = text;
     return returnVal;
 }
+
 
 std::string CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) {
     std::string returnVal = "";

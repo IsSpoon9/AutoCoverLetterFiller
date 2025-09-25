@@ -32,7 +32,8 @@
 
 #define ERROR_INTIALIZE 1
 
-
+#define Template_FileType ".docx"
+#define Template_FileKey "templatefilekey"
 
 class CAutoCoverLetter
 {
@@ -52,7 +53,10 @@ public:
 	void recruiterInformation();
 	void documentCreation();
 
-	bool fileSelector(const char* fileType, std::string& filepath);
+	//bool fileSelector(const char* fileType, std::string& filepath);
+	std::string fileSelectorInstance(const char* dialog, const char* fileType);
+
+	//void stringTochar(char* text, std::string string);
 	std::string inputText(const char* label);
 	std::string dropDownBox(const char* label, int& selectedItem);
 
