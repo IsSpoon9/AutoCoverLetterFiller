@@ -62,7 +62,7 @@ public:
 
 	//void stringTochar(char* text, std::string string);
 	std::string inputText(const char* label, std::string input);
-	std::string dropDownBox(const char* label, int& selectedItem);
+	void dropDownBox(const char* label, int& selectedItem);
 
 
 private:
@@ -76,10 +76,11 @@ private:
 	bool grabfiles;
 
 	std::vector<std::string> foundParagraphs;
+	std::vector<int> numParagraphs;
 
-	int selectedParagraph1 = 0;
-	int selectedParagraph2 = 0;
-	int selectedParagraph3 = 0;
+	int selectedParagraph1;
+	int selectedParagraph2;
+	int selectedParagraph3;
 
 	GLFWwindow* window;
 };

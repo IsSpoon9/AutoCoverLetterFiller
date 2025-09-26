@@ -123,7 +123,7 @@ void CAutoCoverLetter::templateSelection() {
 
             if (grabfiles == true) {
 				grabfiles = false;
-                std::vector<int> numParagraphs = docxAdj.findParagraphs();
+                numParagraphs = docxAdj.findParagraphs();
                 for (int i = 0; i < numParagraphs.size(); i++)
                     foundParagraphs.push_back("Template Paragraph " + std::to_string(i+1));
             }
@@ -169,7 +169,12 @@ void CAutoCoverLetter::documentCreation() {
     if (ImGui::CollapsingHeader("Document Creation", ImGuiTreeNodeFlags_DefaultOpen)) {
         fileSelector(Output_FileKey);
         if(ImGui::Button("Start")) {
-			docxAdj.editDocument(company);
+            company.setParagraph1(numParagraphs[selectedParagraph1]);
+			company.setParagraph2(numParagraphs[selectedParagraph2]);
+            company.setParagraph3(numParagraphs[selectedParagraph3]);
+
+			if (foundParagraphs.size() > 1)
+			    docxAdj.editDocument(company);
         }
     }
 }
@@ -268,7 +273,7 @@ std::string CAutoCoverLetter::inputText(const char* label, std::string input) {
 		return input;
 }
 
-std::string CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) {
+void CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) {
     std::string returnVal = "";
     if (ImGui::BeginCombo(label, foundParagraphs[selectedItem].c_str())) {
         for (int n = 0; n < foundParagraphs.size(); n++) {
@@ -284,5 +289,4 @@ std::string CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) 
         ImGui::EndCombo();
     }
     returnVal = foundParagraphs[selectedItem];
-    return returnVal;
 }

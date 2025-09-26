@@ -55,6 +55,9 @@ bool docxAdjuster::editDocument(companyData company) {
 	// copy original to destination (overwrite if exists)
 	std::filesystem::copy_file(templateLoc, output, std::filesystem::copy_options::overwrite_existing);
 
+
+
+
 	duckx::Document newdoc(output.string());
 	newdoc.open();
 	for (auto p : newdoc.paragraphs()) {

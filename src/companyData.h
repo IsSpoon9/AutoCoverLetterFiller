@@ -18,9 +18,9 @@ public:
 	void setPosition(const std::string& pos) { position = pos; }
 	void setRecruiter(const std::string& rec) { recruiter = rec; }
 
-	void setParagraph1(std::string para) { paragraphs[0] = para; }
-	void setParagraph2(std::string para) { paragraphs[1] = para; }
-	void setParagraph3(std::string para) { paragraphs[2] = para; }
+	void setParagraph1(int para) { paragraphs[0] = para; }
+	void setParagraph2(int para) { paragraphs[1] = para; }
+	void setParagraph3(int para) { paragraphs[2] = para; }
 
 	std::string getName() const { return name; }
 	std::string getAddress() const { return address; }
@@ -31,9 +31,9 @@ public:
 	std::string getPosition() const { return position; }
 	std::string getRecruiter() const { return recruiter; }
 
-	std::string Paragraph1() const { return paragraphs[0]; }
-	std::string Paragraph2() const { return paragraphs[1]; }
-	std::string Paragraph3() const { return paragraphs[2]; }
+	int Paragraph1() const { return paragraphs[0]; }
+	int Paragraph2() const { return paragraphs[1]; }
+	int Paragraph3() const { return paragraphs[2]; }
 	std::vector<std::string> getParagraphs() const { return paragraphs; }
 
 private:
@@ -46,6 +46,6 @@ private:
 	std::string position;
 	std::string recruiter;
 
-	std::vector<std::string> paragraphs;
+	std::vector<int> paragraphs;
 
 };
