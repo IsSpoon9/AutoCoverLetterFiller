@@ -109,22 +109,12 @@ void CAutoCoverLetter::templateSelection() {
 
     if (ImGui::CollapsingHeader("Template Selection", ImGuiTreeNodeFlags_DefaultOpen)) {
         
-        char text[128];
-        strncpy_s(text, docxAdj.getFilePath().c_str(), sizeof(text));
-        text[sizeof(text) - 1] = '\0';
-
-        if (ImGui::InputText("###fileselector", text, IM_ARRAYSIZE(text)))
-            docxAdj.setFilePath(text);
-        ImGui::SameLine();
-
-        if (ImGui::Button("Open File Dialog")) {
-            IGFD::FileDialogConfig config;
-            config.path = ".";
-            ImGuiFileDialog::Instance()->OpenDialog(Template_FileKey, "Choose File", Template_FileType, config);
-        }
-		docxAdj.setFilePath(fileSelectorInstance(Template_FileKey, Template_FileType));
         
         
+        if (fileSelector(Template_FileKey))
+			if (docxAdj.verifyPath()) // THIS CANNOT BE SIMPLIFIED INTO AN AND STATEMENT
+                fileVerified = true;
+
         if (fileVerified) {
 
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));//green
@@ -178,7 +168,7 @@ void CAutoCoverLetter::parameterAdjustment() {
 void CAutoCoverLetter::documentCreation() {
 
     if (ImGui::CollapsingHeader("Document Creation, ImGuiTreeNodeFlags_DefaultOpen")) {
-        //fileSelector(".docx");
+        fileSelector(Output_FileKey);
         ImGui::Button("Start");
     }
 }
@@ -201,39 +191,72 @@ void CAutoCoverLetter::render() {
     glfwSwapBuffers(window);
 }
 
-std::string CAutoCoverLetter::fileSelectorInstance(const char* dialog, const char* fileType0) {
-	std::string filepath = "";
-    if (ImGuiFileDialog::Instance()->Display("ChooseFileDlgKey")) {
+bool CAutoCoverLetter::fileSelector(const char* key) {
+	bool wasChanged = false;
+
+    const char* label;
+	const char* buttontext;
+	const char* filetype;
+
+    char text[CharBufferSize];
+
+    if (key == Template_FileKey) {
+        label = "###templateselector";
+		buttontext = "Choose File";
+		filetype = Template_FileType;
+        strncpy_s(text, docxAdj.getFilePath().c_str(), sizeof(text));
+    }
+    else if (key == Output_FileKey) {
+        label = "###outputselector";
+		buttontext = "Choose Destination";
+		filetype = Output_FileType;
+        strncpy_s(text, docxAdj.getOutputPath().c_str(), sizeof(text));
+    }
+    else
+		return wasChanged;
+
+    text[sizeof(text) - 1] = '\0';
+
+    if (ImGui::InputText(label, text, IM_ARRAYSIZE(text))) {
+        if (key == Template_FileKey)
+            docxAdj.setFilePath(text);
+        else if (key == Output_FileKey)
+            docxAdj.setOutputPath(text);
+        //docxAdj.setFilePath(text);
+    }
+    ImGui::SameLine();
+
+    if (ImGui::Button(buttontext)) {
+        IGFD::FileDialogConfig config;
+        config.path = FileSearchStarter;
+        ImGuiFileDialog::Instance()->OpenDialog(key, buttontext, filetype, config);
+
+        
+    }
+    if (ImGuiFileDialog::Instance()->Display(key)) {
         if (ImGuiFileDialog::Instance()->IsOk()) {
-            //docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
-          
+            if(key == Template_FileKey)
+				docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
+			else if (key == Output_FileKey)
+				docxAdj.setOutputPath(ImGuiFileDialog::Instance()->GetFilePathName());
+
             //filepath = ImGuiFileDialog::Instance()->GetCurrentPath();
-            filepath = ImGuiFileDialog::Instance()->GetFilePathName();
-            //wasChanged = true;
-
-
+            //filepath = ImGuiFileDialog::Instance()->GetFilePathName();
+            wasChanged = true;
+			
         }
-
+        
         ImGuiFileDialog::Instance()->Close();
     }
-	return filepath;
+
+    return wasChanged;
 }
 
-//bool CAutoCoverLetter::fileSelector(const char* fileType, std::string& filepath) {
-    //bool wasChanged = false;
-
-    
-
-    
-
-    
-    //std::cout << filepath;
-//}
 
 std::string CAutoCoverLetter::inputText(const char* label) {
     std::string returnVal = "";
-    static char text[128];
-
+	char text[125];
+	text[0] = '\0'; 
     if (ImGui::InputText(label, text, IM_ARRAYSIZE(text)))
         returnVal = text;
     return returnVal;

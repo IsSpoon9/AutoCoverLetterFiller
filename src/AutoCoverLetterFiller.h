@@ -32,8 +32,13 @@
 
 #define ERROR_INTIALIZE 1
 
+#define CharBufferSize 128
+
+#define FileSearchStarter "."
 #define Template_FileType ".docx"
 #define Template_FileKey "templatefilekey"
+#define Output_FileType ".docx"
+#define Output_FileKey "outputfilekey"
 
 class CAutoCoverLetter
 {
@@ -53,8 +58,7 @@ public:
 	void recruiterInformation();
 	void documentCreation();
 
-	//bool fileSelector(const char* fileType, std::string& filepath);
-	std::string fileSelectorInstance(const char* dialog, const char* fileType);
+	bool fileSelector(const char* key);
 
 	//void stringTochar(char* text, std::string string);
 	std::string inputText(const char* label);
@@ -66,7 +70,7 @@ private:
 
 	companyData company;
 
-	doxcAdjuster docxAdj;
+	docxAdjuster docxAdj;
 
 	bool fileVerified;
 	bool grabfiles;

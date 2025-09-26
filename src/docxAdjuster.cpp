@@ -1,18 +1,18 @@
 #include "docxAdjuster.h"
 
 
-doxcAdjuster::doxcAdjuster()
+docxAdjuster::docxAdjuster()
 {
 	filePath = "";
 	outputPath = "";
 }
 
-doxcAdjuster::~doxcAdjuster()
+docxAdjuster::~docxAdjuster()
 {
 
 }
 
-bool doxcAdjuster::verifyPath() {
+bool docxAdjuster::verifyPath() {
 
 	doc = duckx::Document(filePath);
 
@@ -25,7 +25,7 @@ bool doxcAdjuster::verifyPath() {
 	return false;
 }
 
-std::vector<int> doxcAdjuster::findParagraphs() {
+std::vector<int> docxAdjuster::findParagraphs() {
 	std::vector <int> paragraphsFound;
 	int linenum = 0;
 

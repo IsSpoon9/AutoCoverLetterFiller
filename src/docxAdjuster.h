@@ -19,11 +19,11 @@
 #define JOB_CODE "[Job Position]"
 #define PARAGRAPH_CODE "[Template Paragraph Begin]"
 
-class doxcAdjuster
+class docxAdjuster
 {	
 public:
-	doxcAdjuster();
-	~doxcAdjuster();
+	docxAdjuster();
+	~docxAdjuster();
 
 	bool verifyPath();
 	std::vector<int> findParagraphs();
