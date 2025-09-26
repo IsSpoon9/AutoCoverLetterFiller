@@ -21,6 +21,7 @@
 #define JOB_CODE "[Job Position]"
 #define PARAGRAPH_CODE "[Template Paragraph Begin]"
 
+
 class docxAdjuster
 {	
 public:

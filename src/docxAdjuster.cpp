@@ -58,16 +58,27 @@ bool docxAdjuster::editDocument(companyData company) {
 	duckx::Document newdoc(output.string());
 	newdoc.open();
 	for (auto p : newdoc.paragraphs()) {
-		std::string paragraphText = "";
-		for (auto r : p.runs()) {
-			paragraphText += r.get_text();
+		for (auto run = p.runs(); run.has_next(); run.next()) {
+			std::string text = run.get_text();
 
-			if (paragraphText.find(DATE_CODE) != std::string::npos)
-				replace(paragraphText, DATE_CODE, __DATE__);
-			if (paragraphText.find(COMPANY_CODE) != std::string::npos)
-				replace(paragraphText, COMPANY_CODE, company.getName());
-			p.runs().set_text(paragraphText);
+			// Skip empty runs
+			if(text == "")
+				continue;
 
+			// Simple replace: find "OLD" and replace with "NEW"
+			replace(text, DATE_CODE, __DATE__);
+			replace(text, COMPANY_CODE, company.getName());
+			replace(text, ADDRESS_CODE, company.getAddress());
+			replace(text, CITY_CODE, company.getCity());
+			replace(text, PROVINCE_CODE, company.getProvince());
+			replace(text, POSTAL_CODE, company.getPostalCode());
+			replace(text, RECRUITER_CODE, company.getRecruiter());
+			replace(text, JOB_CODE, company.getPosition());
+			replace(text, PARAGRAPH_CODE, " ");
+			
+			//std::cout << text << std::endl;
+			run.set_text(text);
+			
 		}
 	}
 
@@ -76,8 +87,9 @@ bool docxAdjuster::editDocument(companyData company) {
 }  
 
 void docxAdjuster::replace(std::string& str, const std::string& from, const std::string& to) {
-	size_t start_pos = str.find(from);
-	if (start_pos == std::string::npos)
-		return;
-	str.replace(start_pos, from.length(), to);
+	size_t pos = 0;
+	while ((pos = str.find(from, pos)) != std::string::npos) {
+		str.replace(pos, from.length(), to);
+		pos += to.length();
+	}
 }
