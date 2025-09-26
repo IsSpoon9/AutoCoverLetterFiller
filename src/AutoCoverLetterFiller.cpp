@@ -167,16 +167,19 @@ void CAutoCoverLetter::parameterAdjustment() {
 
 void CAutoCoverLetter::documentCreation() {
 
-    if (ImGui::CollapsingHeader("Document Creation, ImGuiTreeNodeFlags_DefaultOpen")) {
+    if (ImGui::CollapsingHeader("Document Creation", ImGuiTreeNodeFlags_DefaultOpen)) {
         fileSelector(Output_FileKey);
-        ImGui::Button("Start");
+        if(ImGui::Button("Start")) {
+			docxAdj.editDocument(company);
+        }
     }
 }
 
 void CAutoCoverLetter::recruiterInformation() {
     float myValue;
     if (ImGui::CollapsingHeader("Recruiter Information", &recruiterInfo))
-        ImGui::SliderFloat("Value", &myValue, 0.0f, 1.0f);
+        //ImGui::SliderFloat("Value", &myValue, 0.0f, 1.0f);
+		company.setRecruiter(inputText("Recruiter Name"));
 }
 
 void CAutoCoverLetter::render() {
@@ -238,12 +241,13 @@ bool CAutoCoverLetter::fileSelector(const char* key) {
             if(key == Template_FileKey)
 				docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
 			else if (key == Output_FileKey)
-				docxAdj.setOutputPath(ImGuiFileDialog::Instance()->GetFilePathName());
+				docxAdj.setOutputPath(ImGuiFileDialog::Instance()->GetCurrentPath());
 
             //filepath = ImGuiFileDialog::Instance()->GetCurrentPath();
             //filepath = ImGuiFileDialog::Instance()->GetFilePathName();
             wasChanged = true;
-			
+			std::cout << "Selected file: " << ImGuiFileDialog::Instance()->GetCurrentPath() << std::endl;
+			std::cout << docxAdj.getFilePath() << std::endl;
         }
         
         ImGuiFileDialog::Instance()->Close();
@@ -251,7 +255,6 @@ bool CAutoCoverLetter::fileSelector(const char* key) {
 
     return wasChanged;
 }
-
 
 std::string CAutoCoverLetter::inputText(const char* label) {
     std::string returnVal = "";
@@ -261,7 +264,6 @@ std::string CAutoCoverLetter::inputText(const char* label) {
         returnVal = text;
     return returnVal;
 }
-
 
 std::string CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) {
     std::string returnVal = "";

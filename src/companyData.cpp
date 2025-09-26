@@ -9,6 +9,7 @@ companyData::companyData()
 	postalCode = "";
 	country = "";
 	position = "";
+	recruiter = "Recruitment Officer";
 	paragraphs.resize(3);
 	for (auto& para : paragraphs)
 		para = "";	

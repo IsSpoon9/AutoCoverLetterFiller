@@ -16,6 +16,7 @@ public:
 	void setPostalCode(const std::string& pc) { postalCode = pc; }
 	void setCountry(const std::string& ctry) { country = ctry; }
 	void setPosition(const std::string& pos) { position = pos; }
+	void setRecruiter(const std::string& rec) { recruiter = rec; }
 
 	void setParagraph1(std::string para) { paragraphs[0] = para; }
 	void setParagraph2(std::string para) { paragraphs[1] = para; }
@@ -28,6 +29,7 @@ public:
 	std::string getPostalCode() const { return postalCode; }
 	std::string getCountry() const { return country; }
 	std::string getPosition() const { return position; }
+	std::string getRecruiter() const { return recruiter; }
 
 	std::string Paragraph1() const { return paragraphs[0]; }
 	std::string Paragraph2() const { return paragraphs[1]; }
@@ -42,6 +44,7 @@ private:
 	std::string postalCode;
 	std::string country;
 	std::string position;
+	std::string recruiter;
 
 	std::vector<std::string> paragraphs;
 

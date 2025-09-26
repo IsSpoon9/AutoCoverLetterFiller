@@ -3,18 +3,20 @@
 #include <duckx.hpp>
 //https://github.com/amiremohamadi/DuckX
 
+#include <companyData.h>
 
 #include <cstdlib> //convert docx to pdf
 #include <vector>
 #include <string>
 #include <iostream>
+#include <filesystem>
 
 #define DATE_CODE "[Date]"
 #define COMPANY_CODE "[Company Name]" 
 #define ADDRESS_CODE "[Company Address]"
 #define CITY_CODE "[Company City]"
 #define PROVINCE_CODE "[Company Province/State]"
-#define POSTAL_CODE "[Company Postal Code]"
+#define POSTAL_CODE "[Company Postal Address]"
 #define RECRUITER_CODE "[Recruitment Officer]"
 #define JOB_CODE "[Job Position]"
 #define PARAGRAPH_CODE "[Template Paragraph Begin]"
@@ -27,7 +29,7 @@ public:
 
 	bool verifyPath();
 	std::vector<int> findParagraphs();
-	//bool editDocument();
+	bool editDocument(companyData company);
 
 	std::string getFilePath() const { return filePath; }
 	void setFilePath(const std::string& path) { filePath = path; }

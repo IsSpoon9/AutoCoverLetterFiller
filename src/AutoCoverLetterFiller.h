@@ -37,7 +37,7 @@
 #define FileSearchStarter "."
 #define Template_FileType ".docx"
 #define Template_FileKey "templatefilekey"
-#define Output_FileType ".docx"
+#define Output_FileType nullptr
 #define Output_FileKey "outputfilekey"
 
 class CAutoCoverLetter
