@@ -30,6 +30,7 @@ public:
 	bool verifyPath();
 	std::vector<int> findParagraphs();
 	bool editDocument(companyData company);
+	void replace(std::string& str, const std::string& from, const std::string& to);
 
 	std::string getFilePath() const { return filePath; }
 	void setFilePath(const std::string& path) { filePath = path; }

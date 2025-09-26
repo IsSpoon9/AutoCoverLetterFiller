@@ -61,7 +61,7 @@ public:
 	bool fileSelector(const char* key);
 
 	//void stringTochar(char* text, std::string string);
-	std::string inputText(const char* label);
+	std::string inputText(const char* label, std::string input);
 	std::string dropDownBox(const char* label, int& selectedItem);
 
 

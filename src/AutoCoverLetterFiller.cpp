@@ -145,14 +145,13 @@ void CAutoCoverLetter::parameterAdjustment() {
         ImGui::Checkbox("Recruiter Info", &recruiterInfo);
         recruiterInformation();
 
-        company.setName(inputText("Company Name"));
-        company.setAddress(inputText("Company Address"));
-        company.setCity(inputText("City"));
-        company.setProvince(inputText("Province/State"));
-        company.setPostalCode(inputText("Postal Code"));
-        company.setCountry(inputText("Country"));
-        company.setPosition(inputText("Position"));
-
+        company.setName(inputText("Company Name", company.getName()));
+        company.setAddress(inputText("Company Address", company.getAddress()));
+        company.setCity(inputText("City", company.getCity()));
+        company.setProvince(inputText("Province/State", company.getProvince()));
+        company.setPostalCode(inputText("Postal Code", company.getPostalCode()));
+        company.setCountry(inputText("Country", company.getCountry()));
+        company.setPosition(inputText("Position", company.getPosition()));
         
 		if (foundParagraphs.size() > 0)
             dropDownBox("Paragraph 1", selectedParagraph1);
@@ -179,7 +178,7 @@ void CAutoCoverLetter::recruiterInformation() {
     float myValue;
     if (ImGui::CollapsingHeader("Recruiter Information", &recruiterInfo))
         //ImGui::SliderFloat("Value", &myValue, 0.0f, 1.0f);
-		company.setRecruiter(inputText("Recruiter Name"));
+		company.setRecruiter(inputText("Recruiter Name", company.getRecruiter()));
 }
 
 void CAutoCoverLetter::render() {
@@ -256,13 +255,17 @@ bool CAutoCoverLetter::fileSelector(const char* key) {
     return wasChanged;
 }
 
-std::string CAutoCoverLetter::inputText(const char* label) {
-    std::string returnVal = "";
-	char text[125];
-	text[0] = '\0'; 
-    if (ImGui::InputText(label, text, IM_ARRAYSIZE(text)))
-        returnVal = text;
-    return returnVal;
+std::string CAutoCoverLetter::inputText(const char* label, std::string input) {
+    char text[CharBufferSize];
+    strncpy_s(text, input.c_str(), sizeof(text));
+    text[sizeof(text) - 1] = '\0';
+
+    if (ImGui::InputText(label, text, IM_ARRAYSIZE(text))) {
+        std::string returnVal = text;
+        return returnVal;
+    }
+    else
+		return input;
 }
 
 std::string CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) {
