@@ -12,7 +12,7 @@ companyData::companyData()
 	recruiter = "Recruitment Officer";
 	paragraphs.resize(3);
 	for (auto& para : paragraphs)
-		para = "";	
+		para = 0;	
 }
 
 companyData::~companyData()

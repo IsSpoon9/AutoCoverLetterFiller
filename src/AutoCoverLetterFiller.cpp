@@ -126,6 +126,7 @@ void CAutoCoverLetter::templateSelection() {
                 numParagraphs = docxAdj.findParagraphs();
                 for (int i = 0; i < numParagraphs.size(); i++)
                     foundParagraphs.push_back("Template Paragraph " + std::to_string(i+1));
+				cout << "Found " << numParagraphs.size() << " paragraphs." << endl;
             }
 			
         }
@@ -242,8 +243,10 @@ bool CAutoCoverLetter::fileSelector(const char* key) {
     }
     if (ImGuiFileDialog::Instance()->Display(key)) {
         if (ImGuiFileDialog::Instance()->IsOk()) {
-            if(key == Template_FileKey)
-				docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
+            if (key == Template_FileKey) {
+                docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
+				grabfiles = true;
+            }
 			else if (key == Output_FileKey)
 				docxAdj.setOutputPath(ImGuiFileDialog::Instance()->GetCurrentPath());
 

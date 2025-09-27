@@ -31,10 +31,10 @@ public:
 	std::string getPosition() const { return position; }
 	std::string getRecruiter() const { return recruiter; }
 
-	int Paragraph1() const { return paragraphs[0]; }
-	int Paragraph2() const { return paragraphs[1]; }
-	int Paragraph3() const { return paragraphs[2]; }
-	std::vector<std::string> getParagraphs() const { return paragraphs; }
+	int getParagraph1() const { return paragraphs[0]; }
+	int getParagraph2() const { return paragraphs[1]; }
+	int getParagraph3() const { return paragraphs[2]; }
+	std::vector<int> getParagraphs() const { return paragraphs; }
 
 private:
 	std::string name;

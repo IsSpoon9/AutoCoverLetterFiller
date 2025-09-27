@@ -18,11 +18,7 @@ bool docxAdjuster::verifyPath() {
 
 	doc.open();
 
-	for (auto p : doc.paragraphs())
-		for (auto r : p.runs())
-			if(r.get_text() != "")
-				return true;
-	return false;
+	return doc.is_open();
 }
 
 std::vector<int> docxAdjuster::findParagraphs() {
@@ -47,7 +43,6 @@ bool docxAdjuster::editDocument(companyData company) {
 
 	//duckx::Document copy = duckx::Document(outputPath);
 	std::filesystem::path output = outputPath + "\\" + company.getName() + " CoverLetter.docx";
-	std::cout << output << std::endl;
 	std::filesystem::path templateLoc = filePath;
 
 	std::filesystem::create_directories(output.parent_path());
@@ -55,11 +50,29 @@ bool docxAdjuster::editDocument(companyData company) {
 	// copy original to destination (overwrite if exists)
 	std::filesystem::copy_file(templateLoc, output, std::filesystem::copy_options::overwrite_existing);
 
-
-
-
 	duckx::Document newdoc(output.string());
 	newdoc.open();
+
+	std::vector<int> foundparagraphs = findParagraphs();
+	std::vector<int> selectedparagraphs = company.getParagraphs();
+	std::vector<int> removeparagraphs;
+
+	for (int i = 0; i < foundparagraphs.size(); i++) {
+		if (foundparagraphs[i] != selectedparagraphs[0] &&
+			foundparagraphs[i] != selectedparagraphs[1] &&
+			foundparagraphs[i] != selectedparagraphs[2]) 
+				removeparagraphs.push_back(foundparagraphs[i]);
+
+	}
+	
+
+	foundparagraphs.erase(foundparagraphs.begin(), foundparagraphs.begin() + 3);
+	for (auto p : newdoc.paragraphs()) {
+
+	}
+
+
+
 	for (auto p : newdoc.paragraphs()) {
 		for (auto run = p.runs(); run.has_next(); run.next()) {
 			std::string text = run.get_text();
