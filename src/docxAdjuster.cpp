@@ -23,15 +23,16 @@ bool docxAdjuster::verifyPath() {
 
 std::vector<int> docxAdjuster::findParagraphs() {
 	std::vector <int> paragraphsFound;
-	int linenum = 0;
+	int paranum = 0;
 
 	doc.open();
 	for (auto p : doc.paragraphs()) {
-		linenum++;
+		paranum++;
 		std::string paragraphText = "";
 		for (auto r : p.runs())
 			if (r.get_text() == PARAGRAPH_CODE)
-				paragraphsFound.push_back(linenum);
+				paragraphsFound.push_back(paranum+1);
+		//Plus one because we want the next paragraph, not the one with the code
 	}
 
 	return paragraphsFound;
@@ -61,20 +62,27 @@ bool docxAdjuster::editDocument(companyData company) {
 		if (foundparagraphs[i] != selectedparagraphs[0] &&
 			foundparagraphs[i] != selectedparagraphs[1] &&
 			foundparagraphs[i] != selectedparagraphs[2]) 
-				removeparagraphs.push_back(foundparagraphs[i]);
-
-	}
-	
-
-	foundparagraphs.erase(foundparagraphs.begin(), foundparagraphs.begin() + 3);
-	for (auto p : newdoc.paragraphs()) {
+			removeparagraphs.push_back(foundparagraphs[i]+1); 
+		//Have to plus one again because we are removing the next paragraph
 
 	}
 
+	for (int i = 0; i < removeparagraphs.size(); i++)
+		std::cout << "Removing paragraph: " << removeparagraphs[i] << std::endl;
+
+	int paranum = 1;
+	for (auto p : newdoc.paragraphs()) {
+		paranum++;
+		std::string paragraphText = "";
+		for(int i = 0; i < removeparagraphs.size(); i++)
+			if (paranum == removeparagraphs[i])
+				for (auto run : p.runs())
+					run.set_text("");
+	}
 
 
 	for (auto p : newdoc.paragraphs()) {
-		for (auto run = p.runs(); run.has_next(); run.next()) {
+		for (auto run : p.runs()) {
 			std::string text = run.get_text();
 
 			// Skip empty runs
