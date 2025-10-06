@@ -54,34 +54,45 @@ bool docxAdjuster::editDocument(companyData company) {
 	duckx::Document newdoc(output.string());
 	newdoc.open();
 
-	std::vector<int> foundparagraphs = findParagraphs();
-	std::vector<int> selectedparagraphs = company.getParagraphs();
-	std::vector<int> removeparagraphs;
+	std::vector<int> foundparagraphs = findParagraphs(); // All paragraphs
+	std::vector<int> selectedparagraphs = company.getParagraphs(); // Wanted paragraphs
+	std::vector<int> removeparagraphs; // Paragraphs to remove
+	std::vector<std::string> paragraphsKeepTexts; // Texts of wanted paragraphs
 
+	// Collect texts of wanted paragraphs
+	int paranum;
+	for (int i = 0; i < selectedparagraphs.size(); i++) {
+		paranum = 1;
+		for (auto p : newdoc.paragraphs()) {
+			paranum++;
+			if (paranum - 1 == selectedparagraphs[i]) {
+				std::string paraText = "";
+				for (auto run = p.runs(); run.has_next(); run.next())
+					paraText += run.get_text();
+				paragraphsKeepTexts.push_back(paraText);
+			}
+		}
+	}
+	for (int i = 0; i < paragraphsKeepTexts.size(); i++)
+		std::cout << "Keeping paragraph: " << paragraphsKeepTexts[i] << std::endl;
+
+	// Find indexes of paragraphs to remove
 	for (int i = 0; i < foundparagraphs.size(); i++) {
 		if (foundparagraphs[i] != selectedparagraphs[0] &&
 			foundparagraphs[i] != selectedparagraphs[1] &&
-			foundparagraphs[i] != selectedparagraphs[2]) 
-			removeparagraphs.push_back(foundparagraphs[i]+1); 
+			foundparagraphs[i] != selectedparagraphs[2])
+			removeparagraphs.push_back(foundparagraphs[i] + 1);
 		//Have to plus one again because we are removing the next paragraph
 
 	}
-
 	for (int i = 0; i < removeparagraphs.size(); i++)
-		std::cout << "Removing paragraph: " << removeparagraphs[i] << std::endl;
+		std::cout << "Removing paragraph number: " << removeparagraphs[i] << std::endl;
 
-	int paranum = 1;
+	// Change all elements to desired
+	paranum = 1;
+	int paraPlaced = 0;
 	for (auto p : newdoc.paragraphs()) {
 		paranum++;
-		std::string paragraphText = "";
-		for(int i = 0; i < removeparagraphs.size(); i++)
-			if (paranum == removeparagraphs[i])
-				for (auto run : p.runs())
-					run.set_text("");
-	}
-
-
-	for (auto p : newdoc.paragraphs()) {
 		for (auto run : p.runs()) {
 			std::string text = run.get_text();
 
@@ -98,7 +109,22 @@ bool docxAdjuster::editDocument(companyData company) {
 			replace(text, POSTAL_CODE, company.getPostalCode());
 			replace(text, RECRUITER_CODE, company.getRecruiter());
 			replace(text, JOB_CODE, company.getPosition());
-			replace(text, PARAGRAPH_CODE, " ");
+			replace(text, PARAGRAPH_CODE, "");
+			
+			//Change to wanted paragraphs
+			if (paraPlaced < paragraphsKeepTexts.size())
+				for (int i = paraPlaced; i < foundparagraphs.size(); i++) {
+					if ((paranum - 1 == foundparagraphs[i])) {
+						text = paragraphsKeepTexts[i];
+						paraPlaced++;
+					}
+				}
+
+			//Remove unwanted paragraphs
+			for (int i = 0; i < removeparagraphs.size(); i++)
+				if (paranum == removeparagraphs[i])
+					text = "";	
+
 			
 			//std::cout << text << std::endl;
 			run.set_text(text);
