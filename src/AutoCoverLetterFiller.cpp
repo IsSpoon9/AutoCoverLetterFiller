@@ -14,6 +14,7 @@ CAutoCoverLetter::CAutoCoverLetter() {
     recruiterInfo = false;
 	grabfiles = false;
     fileVerified = false;
+	doxcsCreated = 0;
 	selectedParagraph1 = 0;
     selectedParagraph2 = 1;
 	selectedParagraph3 = 2;
@@ -126,7 +127,6 @@ void CAutoCoverLetter::templateSelection() {
                 numParagraphs = docxAdj.findParagraphs();
                 for (int i = 0; i < numParagraphs.size(); i++)
                     foundParagraphs.push_back("Template Paragraph " + std::to_string(i+1));
-				cout << "Found " << numParagraphs.size() << " paragraphs." << endl;
             }
 			
         }
@@ -169,13 +169,21 @@ void CAutoCoverLetter::documentCreation() {
 
     if (ImGui::CollapsingHeader("Document Creation", ImGuiTreeNodeFlags_DefaultOpen)) {
         fileSelector(Output_FileKey);
-        if(ImGui::Button("Start")) {
+        if (ImGui::Button("Start")) {
             company.setParagraph1(numParagraphs[selectedParagraph1]);
-			company.setParagraph2(numParagraphs[selectedParagraph2]);
+            company.setParagraph2(numParagraphs[selectedParagraph2]);
             company.setParagraph3(numParagraphs[selectedParagraph3]);
 
-			if (foundParagraphs.size() > 1)
-			    docxAdj.editDocument(company);
+
+            if (foundParagraphs.size() > 1)
+                if(docxAdj.editDocument(company))
+					doxcsCreated++;
+
+        }
+        if (doxcsCreated > 0) {
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.8f, 1.0f));//blue
+            ImGui::Text("Documents Created: %d", doxcsCreated);
+            ImGui::PopStyleColor();
         }
     }
 }

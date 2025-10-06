@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>	
 #include <vector>
+#include <random>
 
 // TODO: Reference additional headers your program requires here.
 #include <ImGuiFileDialog.h>
@@ -74,6 +75,7 @@ private:
 
 	bool fileVerified;
 	bool grabfiles;
+	int doxcsCreated;
 
 	std::vector<std::string> foundParagraphs;
 	std::vector<int> numParagraphs;
