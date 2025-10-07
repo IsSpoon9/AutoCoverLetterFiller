@@ -60,6 +60,8 @@ public:
 	void documentCreation();
 
 	bool fileSelector(const char* key);
+	
+	int errorCheck();
 
 	//void stringTochar(char* text, std::string string);
 	std::string inputText(const char* label, std::string input);
@@ -83,6 +85,10 @@ private:
 	int selectedParagraph1;
 	int selectedParagraph2;
 	int selectedParagraph3;
+
+	ImVec4 red;
+	ImVec4 blue;
+	ImVec4 green;
 
 	GLFWwindow* window;
 };

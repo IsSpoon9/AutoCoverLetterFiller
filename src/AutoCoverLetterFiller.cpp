@@ -18,6 +18,10 @@ CAutoCoverLetter::CAutoCoverLetter() {
 	selectedParagraph1 = 0;
     selectedParagraph2 = 1;
 	selectedParagraph3 = 2;
+
+    red = ImVec4(0.8f, 0.2f, 0.2f, 1.0f);
+    blue = ImVec4(0.3f, 0.3f, 0.8f, 1.0f);
+    green = ImVec4(0.2f, 0.8f, 0.2f, 1.0f);
 }
 
 CAutoCoverLetter::~CAutoCoverLetter()
@@ -112,13 +116,12 @@ void CAutoCoverLetter::templateSelection() {
         
         
         
-        if (fileSelector(Template_FileKey))
-			if (docxAdj.verifyPath()) // THIS CANNOT BE SIMPLIFIED INTO AN AND STATEMENT
+        if (fileSelector(Template_FileKey) && docxAdj.verifyPath())
                 fileVerified = true;
 
         if (fileVerified) {
 
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.2f, 0.8f, 0.2f, 1.0f));//green
+            ImGui::PushStyleColor(ImGuiCol_Text, green);
             ImGui::Text("File Verified");
             ImGui::PopStyleColor();
 
@@ -132,7 +135,7 @@ void CAutoCoverLetter::templateSelection() {
         }
 
         else {
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));//red
+            ImGui::PushStyleColor(ImGuiCol_Text, red);
             ImGui::Text("File Not Verified");
             ImGui::PopStyleColor();
         }
@@ -169,20 +172,30 @@ void CAutoCoverLetter::documentCreation() {
 
     if (ImGui::CollapsingHeader("Document Creation", ImGuiTreeNodeFlags_DefaultOpen)) {
         fileSelector(Output_FileKey);
-        if (ImGui::Button("Start")) {
-            company.setParagraph1(numParagraphs[selectedParagraph1]);
-            company.setParagraph2(numParagraphs[selectedParagraph2]);
-            company.setParagraph3(numParagraphs[selectedParagraph3]);
+
+        int errorNum = errorCheck();
+        if (errorNum == 0) {
+            if (ImGui::Button("Start")) {
+                company.setParagraph1(numParagraphs[selectedParagraph1]);
+                company.setParagraph2(numParagraphs[selectedParagraph2]);
+                company.setParagraph3(numParagraphs[selectedParagraph3]);
 
 
-            if (foundParagraphs.size() > 1)
-                if(docxAdj.editDocument(company))
-					doxcsCreated++;
+                if (foundParagraphs.size() > 1)
+                    if (docxAdj.editDocument(company))
+                        doxcsCreated++;
 
+            }
+            if (doxcsCreated > 0) {
+                ImGui::PushStyleColor(ImGuiCol_Text, blue);
+                ImGui::Text("Documents Created: %d", doxcsCreated);
+                ImGui::PopStyleColor();
+            }
         }
-        if (doxcsCreated > 0) {
-            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.3f, 0.3f, 0.8f, 1.0f));//blue
-            ImGui::Text("Documents Created: %d", doxcsCreated);
+        else
+        {
+            ImGui::PushStyleColor(ImGuiCol_Text, red);
+            ImGui::Text("Errors Detected: %d", errorNum);
             ImGui::PopStyleColor();
         }
     }
@@ -234,8 +247,11 @@ bool CAutoCoverLetter::fileSelector(const char* key) {
     text[sizeof(text) - 1] = '\0';
 
     if (ImGui::InputText(label, text, IM_ARRAYSIZE(text))) {
-        if (key == Template_FileKey)
+        if (key == Template_FileKey) {
+            grabfiles = true;
+            wasChanged;
             docxAdj.setFilePath(text);
+        }
         else if (key == Output_FileKey)
             docxAdj.setOutputPath(text);
         //docxAdj.setFilePath(text);
@@ -300,4 +316,26 @@ void CAutoCoverLetter::dropDownBox(const char* label, int &selectedItem) {
         ImGui::EndCombo();
     }
     returnVal = foundParagraphs[selectedItem];
+}
+
+int CAutoCoverLetter::errorCheck() {
+    int counter = 0;
+    if (company.getAddress() == "")
+        counter++;
+    if (company.getCity() == "")
+        counter++;
+    if (company.getCountry() == "")
+        counter++;
+    if (company.getName() == "")
+        counter++;
+    if (company.getPosition() == "")
+        counter++;
+    if (company.getPostalCode() == "")
+        counter++;
+    if (company.getProvince() == "")
+        counter++;
+    if (foundParagraphs.empty())
+        counter++;
+
+    return counter;
 }
