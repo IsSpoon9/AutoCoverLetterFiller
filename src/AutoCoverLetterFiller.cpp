@@ -116,22 +116,22 @@ void CAutoCoverLetter::templateSelection() {
         
         
         
-        if (fileSelector(Template_FileKey) && docxAdj.verifyPath())
-                fileVerified = true;
-
-        if (fileVerified) {
+        if (selectTemplate() && docxAdj.verifyPath()) {
 
             ImGui::PushStyleColor(ImGuiCol_Text, green);
             ImGui::Text("File Verified");
             ImGui::PopStyleColor();
 
-            if (grabfiles == true) {
-				grabfiles = false;
-                numParagraphs = docxAdj.findParagraphs();
-                for (int i = 0; i < numParagraphs.size(); i++)
-                    foundParagraphs.push_back("Template Paragraph " + std::to_string(i+1));
-            }
-			
+            numParagraphs = docxAdj.findParagraphs();
+            for (int i = 0; i < numParagraphs.size(); i++)
+                foundParagraphs.push_back("Template Paragraph " + std::to_string(i + 1));
+
+        }
+
+        else if (docxAdj.verifyPath()) {
+            ImGui::PushStyleColor(ImGuiCol_Text, green);
+            ImGui::Text("File Verified");
+            ImGui::PopStyleColor();
         }
 
         else {
@@ -171,7 +171,7 @@ void CAutoCoverLetter::parameterAdjustment() {
 void CAutoCoverLetter::documentCreation() {
 
     if (ImGui::CollapsingHeader("Document Creation", ImGuiTreeNodeFlags_DefaultOpen)) {
-        fileSelector(Output_FileKey);
+        selectDesination();
 
         int errorNum = errorCheck();
         if (errorNum == 0) {
@@ -220,67 +220,72 @@ void CAutoCoverLetter::render() {
     glfwSwapBuffers(window);
 }
 
-bool CAutoCoverLetter::fileSelector(const char* key) {
-	bool wasChanged = false;
+bool CAutoCoverLetter::selectDesination() {
+    bool wasChanged = false;
 
-    const char* label;
-	const char* buttontext;
-	const char* filetype;
 
-    char text[CharBufferSize];
+    char boxtext[CharBufferSize];
+    const char* tag = Output_Tag;
+    const char* prompttext = Output_PromptText;
+    const char* filetype = Output_FileType;
+    strncpy_s(boxtext, docxAdj.getOutputPath().c_str(), sizeof(boxtext));
 
-    if (key == Template_FileKey) {
-        label = "###templateselector";
-		buttontext = "Choose File";
-		filetype = Template_FileType;
-        strncpy_s(text, docxAdj.getFilePath().c_str(), sizeof(text));
-    }
-    else if (key == Output_FileKey) {
-        label = "###outputselector";
-		buttontext = "Choose Destination";
-		filetype = Output_FileType;
-        strncpy_s(text, docxAdj.getOutputPath().c_str(), sizeof(text));
-    }
-    else
-		return wasChanged;
+    boxtext[sizeof(boxtext) - 1] = '\0';// 1 to remove null from string end
 
-    text[sizeof(text) - 1] = '\0';
-
-    if (ImGui::InputText(label, text, IM_ARRAYSIZE(text))) {
-        if (key == Template_FileKey) {
-            grabfiles = true;
-            wasChanged;
-            docxAdj.setFilePath(text);
-        }
-        else if (key == Output_FileKey)
-            docxAdj.setOutputPath(text);
-        //docxAdj.setFilePath(text);
+    if (ImGui::InputText(tag, boxtext, IM_ARRAYSIZE(boxtext))) {
+        docxAdj.setOutputPath(boxtext);
+		wasChanged = true;
     }
     ImGui::SameLine();
 
-    if (ImGui::Button(buttontext)) {
+    if (ImGui::Button(prompttext)) {
         IGFD::FileDialogConfig config;
         config.path = FileSearchStarter;
-        ImGuiFileDialog::Instance()->OpenDialog(key, buttontext, filetype, config);
+        ImGuiFileDialog::Instance()->OpenDialog(tag, prompttext, filetype, config);
 
-        
+
     }
-    if (ImGuiFileDialog::Instance()->Display(key)) {
+    if (ImGuiFileDialog::Instance()->Display(tag)) {
         if (ImGuiFileDialog::Instance()->IsOk()) {
-            if (key == Template_FileKey) {
-                docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
-				grabfiles = true;
-            }
-			else if (key == Output_FileKey)
-				docxAdj.setOutputPath(ImGuiFileDialog::Instance()->GetCurrentPath());
-
-            //filepath = ImGuiFileDialog::Instance()->GetCurrentPath();
-            //filepath = ImGuiFileDialog::Instance()->GetFilePathName();
+            docxAdj.setOutputPath(ImGuiFileDialog::Instance()->GetCurrentPath());
             wasChanged = true;
-			std::cout << "Selected file: " << ImGuiFileDialog::Instance()->GetCurrentPath() << std::endl;
-			std::cout << docxAdj.getFilePath() << std::endl;
         }
-        
+
+        ImGuiFileDialog::Instance()->Close();
+    }
+
+    return wasChanged;
+}
+
+bool CAutoCoverLetter::selectTemplate() {
+    bool wasChanged = false;
+
+    char boxtext[CharBufferSize];
+    const char* tag = Template_Tag;
+    const char* prompttext = Template_PromptText;
+    const char* filetype = Template_FileType;
+    strncpy_s(boxtext, docxAdj.getFilePath().c_str(), sizeof(boxtext));
+
+    boxtext[sizeof(boxtext) - 1] = '\0';// 1 to remove null from string end
+
+    if (ImGui::InputText(tag, boxtext, IM_ARRAYSIZE(boxtext))) {
+        wasChanged = true;
+        docxAdj.setFilePath(boxtext);
+    }
+    ImGui::SameLine();
+
+    if (ImGui::Button(prompttext)) {
+        IGFD::FileDialogConfig config;
+        config.path = FileSearchStarter;
+        ImGuiFileDialog::Instance()->OpenDialog(tag, prompttext, filetype, config);
+    }
+
+    if (ImGuiFileDialog::Instance()->Display(tag)){
+        if (ImGuiFileDialog::Instance()->IsOk()){
+            docxAdj.setFilePath(ImGuiFileDialog::Instance()->GetFilePathName());
+            wasChanged = true;
+        }
+
         ImGuiFileDialog::Instance()->Close();
     }
 

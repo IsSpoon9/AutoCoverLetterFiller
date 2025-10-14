@@ -35,11 +35,15 @@
 
 #define CharBufferSize 128
 
-#define FileSearchStarter "."
+#define FileSearchStarter ""
 #define Template_FileType ".docx"
-#define Template_FileKey "templatefilekey"
+#define Template_PromptText "Choose Template Docx"
+#define Template_Tag "###templateselector"
+
 #define Output_FileType nullptr
-#define Output_FileKey "outputfilekey"
+#define Output_PromptText "Choose Destination Folder"
+#define Output_Tag "###outputselector"
+
 
 class CAutoCoverLetter
 {
@@ -59,7 +63,8 @@ public:
 	void recruiterInformation();
 	void documentCreation();
 
-	bool fileSelector(const char* key);
+	bool selectDesination();
+	bool selectTemplate();
 	
 	int errorCheck();
 
