@@ -5,10 +5,7 @@
 
 using namespace std;
 
-int main() {
-	CAutoCoverLetter app;
-	return app.run();
-}
+
 
 CAutoCoverLetter::CAutoCoverLetter() {
     recruiterInfo = false;
@@ -114,8 +111,6 @@ void CAutoCoverLetter::templateSelection() {
 
     if (ImGui::CollapsingHeader("Template Selection", ImGuiTreeNodeFlags_DefaultOpen)) {
         
-        
-        
         if (selectTemplate() && docxAdj.verifyPath()) {
 
             ImGui::PushStyleColor(ImGuiCol_Text, green);
@@ -143,8 +138,6 @@ void CAutoCoverLetter::templateSelection() {
 }
 
 void CAutoCoverLetter::parameterAdjustment() {
-
-
     if (ImGui::CollapsingHeader("Parameter Adjustments", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Checkbox("Recruiter Info", &recruiterInfo);
         recruiterInformation();
@@ -163,8 +156,7 @@ void CAutoCoverLetter::parameterAdjustment() {
 		    dropDownBox("Paragraph 2", selectedParagraph2);
 		if (foundParagraphs.size() > 2)
 		    dropDownBox("Paragraph 3", selectedParagraph3);
-
-        
+            
     }
 }
 

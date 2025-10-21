@@ -1,6 +1,6 @@
 #pragma once
 
-#include <duckx.hpp>
+#include "duckx.hpp"
 //https://github.com/amiremohamadi/DuckX
 
 #include <companyData.h>
