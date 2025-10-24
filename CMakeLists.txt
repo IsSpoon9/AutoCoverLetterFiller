@@ -13,25 +13,25 @@ project (App VERSION 0.9)
 
 
 add_library(imgui
-    ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/imgui.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/imgui_draw.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/imgui_tables.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/imgui_widgets.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/backends/imgui_impl_opengl3.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/backends/imgui_impl_glfw.cpp)
+    extern/imgui/imgui.cpp
+    extern/imgui/imgui_draw.cpp
+    extern/imgui/imgui_tables.cpp
+    extern/imgui/imgui_widgets.cpp
+    extern/imgui/backends/imgui_impl_opengl3.cpp
+    extern/imgui/backends/imgui_impl_glfw.cpp)
 
 add_library(srcfiles
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/AutoCoverLetterFiller.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/AutoCoverLetterFiller.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/companyData.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/companyData.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/docxAdjuster.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/docxAdjuster.h
+    src/AutoCoverLetterFiller.cpp
+    src/AutoCoverLetterFiller.h
+    src/companyData.cpp
+    src/companyData.h
+    src/docxAdjuster.cpp
+    src/docxAdjuster.h
 )
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/DuckX)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/ImGuiFileDialog)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw)
+add_subdirectory(extern/DuckX)
+add_subdirectory(extern/ImGuiFileDialog)
+add_subdirectory(extern/glfw)
 
 # Add source to this project's executable.
 add_executable (App "src/main.cpp")
@@ -51,28 +51,16 @@ target_link_libraries(App
     srcfiles
 )
 
-target_include_directories(imgui PUBLIC 
+target_include_directories(imgui PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/extern/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/extern/glfw/include 
     opengl32
 )
 
-target_include_directories(ImGuiFileDialog PRIVATE 
-    extern/imgui
-    extern/imgui/backends
-)
-
 target_include_directories(App PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_include_directories(App PRIVATE 
-    extern/DuckX/include 
-    extern/DuckX/thirdparty/pugixml 
-    extern/DuckX/thirdparty/zip
-    extern/DuckX/thirdparty/zip
-    extern/glfw/include 
-)
 
 
