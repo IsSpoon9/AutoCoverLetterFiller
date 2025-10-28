@@ -7,6 +7,17 @@
 #include <string>
 #include <vector>
 
+// Company Data Default Names
+#define DEFAULT_COMPANY_NAME ""
+#define DEFAULT_COMPANY_ADDRESS ""
+#define DEFAULT_COMPANY_CITY ""
+#define DEFAULT_COMPANY_PROVINCE ""
+#define DEFAULT_COMPANY_POSTALCODE ""
+#define DEFAULT_COMPANY_COUNTRY ""
+#define DEFAULT_COMPANY_POSITION ""
+#define DEFAULT_COMPANY_RECRUITER "Recruitment Officer"
+
+
 class companyData
 {
 public:

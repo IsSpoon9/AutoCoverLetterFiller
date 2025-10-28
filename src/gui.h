@@ -4,26 +4,31 @@
 // Date: 2025-10-28
 
 #pragma once
+// Standard Includes
 #include <iostream>
 #include <string>	
 #include <vector>
 #include <random>
 
-// TODO: Reference additional headers your program requires here.
+// Used for file dialog
+// Not mine, see below for link
 #include <ImGuiFileDialog.h>
 //https://github.com/aiekick/ImGuiFileDialog
 
-//use for gui
+// Used for Gui
+// Not mine, see below for link
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <GLFW/glfw3.h>
 //https://github.com/ocornut/imgui
 
+
+// Custom Includes
 #include <docxAdjuster.h>
-#include <gui.h>
 #include <companyData.h>
 
+// Gui Constants
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 #define WINDOW_NAME "Auto Cover Letter Filler v1.0"

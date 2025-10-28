@@ -1,33 +1,31 @@
 #include "docxAdjuster.h"
 
-
+// Constructor and Destructor
 docxAdjuster::docxAdjuster()
 {
+	// Variables Initialization
 	filePath = "";
 	outputPath = "";
 }
-
 docxAdjuster::~docxAdjuster()
 {
 
 }
 
+// Methods
 bool docxAdjuster::verifyPath() {
-
+	//Verify that the file path is valid
 	doc = duckx::Document(filePath);
-
 	doc.open();
-
 	return doc.is_open();
 }
-
 std::vector<int> docxAdjuster::findParagraphs() {
 	std::vector <int> paragraphsFound;
 	int paranum = 0;
 
 	doc.open();
 	for (auto p : doc.paragraphs()) {
-		paranum++;
+		paranum++;//Paragraph number counter
 		std::string paragraphText = "";
 		for (auto r : p.runs())
 			if (r.get_text() == PARAGRAPH_CODE)
@@ -37,23 +35,23 @@ std::vector<int> docxAdjuster::findParagraphs() {
 
 	return paragraphsFound;
 }
-
 bool docxAdjuster::editDocument(companyData company) {
 	if (filePath == "" || outputPath == "")
-		return false;
-
-	//duckx::Document copy = duckx::Document(outputPath);
+		return false; // Invalid paths, Dont Run.
+	
+	// Create output directory
 	std::filesystem::path output = outputPath + "\\" + company.getName() + " CoverLetter.docx";
-	std::filesystem::path templateLoc = filePath;
-
 	std::filesystem::create_directories(output.parent_path());
 
-	// copy original to destination (overwrite if exists)
+	// Copy original to destination
+	std::filesystem::path templateLoc = filePath; // Template location
 	std::filesystem::copy_file(templateLoc, output, std::filesystem::copy_options::overwrite_existing);
 
+	// Open new document
 	duckx::Document newdoc(output.string());
 	newdoc.open();
 
+	// Find paragraphs to keep and remove
 	std::vector<int> foundparagraphs = findParagraphs(); // All paragraphs
 	std::vector<int> selectedparagraphs = company.getParagraphs(); // Wanted paragraphs
 	std::vector<int> removeparagraphs; // Paragraphs to remove
@@ -62,7 +60,7 @@ bool docxAdjuster::editDocument(companyData company) {
 	// Collect texts of wanted paragraphs
 	int paranum;
 	for (int i = 0; i < selectedparagraphs.size(); i++) {
-		paranum = 1;
+		paranum = 1; // Reset paragraph number counter for each selected paragraph
 		for (auto p : newdoc.paragraphs()) {
 			paranum++;
 			if (paranum - 1 == selectedparagraphs[i]) {
@@ -73,8 +71,6 @@ bool docxAdjuster::editDocument(companyData company) {
 			}
 		}
 	}
-	for (int i = 0; i < paragraphsKeepTexts.size(); i++)
-		std::cout << "Keeping paragraph: " << paragraphsKeepTexts[i] << std::endl;
 
 	// Find indexes of paragraphs to remove
 	for (int i = 0; i < foundparagraphs.size(); i++) {
@@ -85,8 +81,6 @@ bool docxAdjuster::editDocument(companyData company) {
 		//Have to plus one again because we are removing the next paragraph
 
 	}
-	for (int i = 0; i < removeparagraphs.size(); i++)
-		std::cout << "Removing paragraph number: " << removeparagraphs[i] << std::endl;
 
 	// Change all elements to desired
 	paranum = 1;
@@ -133,10 +127,18 @@ bool docxAdjuster::editDocument(companyData company) {
 	}
 
 	newdoc.save();
+
+	#ifdef DEBUG // DEBUG THINGS
+		for (int i = 0; i < paragraphsKeepTexts.size(); i++)
+			std::cout << "Keeping paragraph: " << paragraphsKeepTexts[i] << std::endl;
+		for (int i = 0; i < removeparagraphs.size(); i++)
+			std::cout << "Removing paragraph number: " << removeparagraphs[i] << std::endl;
+	#endif 
+
 	return true;
 }  
-
 void docxAdjuster::replace(std::string& str, const std::string& from, const std::string& to) {
+	// Replace all instances of "from" with "to" in str.
 	size_t pos = 0;
 	while ((pos = str.find(from, pos)) != std::string::npos) {
 		str.replace(pos, from.length(), to);

@@ -81,19 +81,18 @@ void GuiApp::events() {
     ImGui::NewFrame();
 }
 void GuiApp::interface() {
-
+	// Primary Window Setup
     ImGui::SetNextWindowPos(ImVec2(0, 0));
     ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
     ImGui::Begin("Primary", nullptr,
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoCollapse);
+		ImGuiWindowFlags_NoCollapse); 
+    //Needed to be called primary window. for look.
 
     templateSelection();
-
     parameterAdjustment();
-
     documentCreation();
 
     ImGui::End();
