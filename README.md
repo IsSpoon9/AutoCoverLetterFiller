@@ -1,41 +1,70 @@
-# AutoCoverLetterFiller
+##### **AutoCoverLetter** 
 
-AutoCoverLetter generates customized cover letters from a
+Version: 1.0 
 
-template word document and fills in company data provided by the user.
--- Features --
+Date: 2025-10-28 
 
-    Corrects
-    Manipulate paragraph structure
-    Print both word documents and PDF's
+Created by: Ethan Siemens
 
--- Requirements --
+License: Copywrite
 
-    Python 3.13
-    dearpygui https://pypi.org/project/dearpygui/
-    python-docx https://pypi.org/project/python-docx/
-    pypdf https://pypi.org/project/pypdf/
 
--- Templates --
 
-** These templates must be exactly the same as the are printed below **
+###### -- Description -- 
 
-[Date]
+**AutoCoverLetter** automatically generates customized cover letters from a template Word document. 
 
-[Company Name]
+It fills in company-specific data provided by the user to produce a personalized output file.
 
-[Company Address]
 
-[Company City]
 
-[Company Province/State]
+###### -- Features -- 
 
-[Company Postal Address]
+This program can:
 
-[Recruitment Officer] → Used whenever you're addressing the recruitment officer
+* Automatically replace template placeholders with user-provided information
+* Modify paragraph structures dynamically
+* Output a newly generated Word document 
 
-[Position] → Job position you're applying for
 
-[Template Paragraph Begin] → Use this to mark sections meant for dynamic template insertion
 
-  (Do Not place this in the introduction or conclusion)
+###### -- Templates --
+
+Use the following placeholders exactly as shown in your Word template.
+
+The program will search for these tags and replace them automatically.\[Date] → For changing to the current date.
+
+**(MUST BE EXACTLY AS WRITTEN IN THE PLACE HOLDER)**
+
+**Placeholder			Description**
+
+\[Date]				Inserts the current date
+
+\[Company Name]			Company’s name
+
+\[Company Address]		Company’s street address
+
+\[Company City]			Company’s city
+
+\[Company Province/State]	Province or state of the company
+
+\[Company Postal Address]	Company’s postal or ZIP code
+
+\[Recruitment Officer]		Name of the recruitment officer
+
+\[Position]			Job position being applied for
+
+\[Template Paragraph Begin]	Marks sections intended for dynamic template insertion (Do not place this in the introduction or conclusion)
+
+
+
+###### -- Notes -- 
+
+Somethings to note about this program are: 
+
+* The program may not work perfectly with very complex or heavily formatted documents.
+* If you encounter any bugs or errors, please report them via GitHub or message me on Discord at is\_spoon9.
+* More features and updates may happen later on.
+
+
+
