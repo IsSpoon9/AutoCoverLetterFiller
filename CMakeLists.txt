@@ -33,10 +33,9 @@ target_include_directories(ImGuiFileDialog PUBLIC
 
 # --- Main Executable ---
 add_executable(AutoCoverLetterFiller
-    src/AutoCoverLetterFiller.cpp
+    src/gui.cpp
     src/companyData.cpp
     src/docxAdjuster.cpp
-    src/gui.cpp
     src/main.cpp
 )
 

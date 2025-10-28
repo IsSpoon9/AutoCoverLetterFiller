@@ -1,3 +1,9 @@
+// docxAdjuster.h
+// Edits and Reads Documents
+// By: Ethan Siemens
+// Date: 2025-10-28
+
+
 #pragma once
 
 #include <duckx.hpp>
